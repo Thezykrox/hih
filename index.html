@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8f294b">
+<title>Feliz Día de las Madres ❤️</title>
+<style>
+:root{--wine:#7e203f;--rose:#c64f75;--pink:#ffe6ee;--cream:#fff9f7;--gold:#d9ad72}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Georgia,'Times New Roman',serif;color:#64213a;background:radial-gradient(circle at top,#fff 0,#fff0f4 42%,#f8d7e1 100%);display:flex;align-items:center;justify-content:center;padding:22px;overflow-x:hidden}
+body:before,body:after{content:"❤";position:fixed;color:#d95e83;opacity:.13;font-size:clamp(100px,25vw,240px);z-index:0;pointer-events:none}
+body:before{top:-45px;left:-45px;transform:rotate(-20deg)}body:after{bottom:-70px;right:-35px;transform:rotate(18deg)}
+.card{position:relative;z-index:1;width:min(100%,570px);background:rgba(255,251,250,.94);border:1px solid #e8b6c5;border-radius:28px;padding:clamp(24px,6vw,46px);box-shadow:0 18px 55px #8f294b24;text-align:center}
+.flower{font-size:38px;letter-spacing:8px;margin-bottom:12px}
+.kicker{text-transform:uppercase;letter-spacing:3px;font:700 11px Arial,sans-serif;color:#b04467}
+h1{font-size:clamp(36px,9vw,55px);line-height:1.03;margin:14px 0;color:var(--wine);font-weight:normal}
+.rule{width:78px;height:2px;background:var(--gold);margin:22px auto}
+.lead{font-size:19px;line-height:1.6;margin:0 auto 10px;max-width:420px}
+.sub{font:14px/1.6 Arial,sans-serif;color:#87566a;margin:0 auto 25px;max-width:390px}
+.options{display:grid;grid-template-columns:1fr;gap:13px;margin-top:22px}
+.choice{display:flex;align-items:center;gap:16px;text-align:left;padding:17px 18px;border-radius:18px;border:1px solid #e5aabc;background:linear-gradient(120deg,#fff,#fff0f4);color:var(--wine);cursor:pointer;transition:transform .15s,box-shadow .15s;font:inherit;width:100%}
+.choice:hover,.choice:focus-visible{transform:translateY(-2px);box-shadow:0 8px 22px #8f294b20;outline:2px solid #d96b8b;outline-offset:2px}
+.emoji{font-size:36px;min-width:48px;text-align:center}
+.choice strong{display:block;font-size:20px;font-weight:normal;margin-bottom:4px}
+.choice small{font:13px/1.4 Arial,sans-serif;color:#936477}
+.note{font:12px/1.5 Arial,sans-serif;color:#a16b7e;margin-top:24px}
+#result{display:none}
+.result-emoji{font-size:56px;margin:10px}
+.result-text{font-size:18px;line-height:1.65}
+.send{display:inline-block;margin-top:18px;padding:14px 22px;background:#218c57;color:white;text-decoration:none;border-radius:999px;font:700 15px Arial,sans-serif;box-shadow:0 8px 20px #218c5730}
+.back{display:block;border:0;background:transparent;color:#9a4260;text-decoration:underline;margin:17px auto 0;cursor:pointer;font:14px Arial,sans-serif}
+footer{margin-top:26px;font-size:13px;color:#b04467}
+@media(min-width:480px){.options{grid-template-columns:1fr 1fr}.choice{display:block;text-align:center;padding:20px 12px}.emoji{display:block;margin-bottom:10px}.choice strong{font-size:18px}.choice small{display:block}}
+@media(prefers-reduced-motion:no-preference){.card{animation:rise .7s ease-out}@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
+</style>
+</head>
+<body>
+<main class="card">
+  <section id="home">
+    <div class="flower" aria-hidden="true">🌹 💗 🌹</div>
+    <div class="kicker">Con todo mi amor</div>
+    <h1>¡Feliz Día<br>de las Madres!</h1>
+    <div class="rule"></div>
+    <p class="lead">Hoy quiero regalarte una sorpresa muy especial. 💝</p>
+    <p class="sub">Elegí el regalo que más te ilusione. Lo importante es verte feliz y crear recuerdos hermosos juntos.</p>
+    <div class="options">
+      <button class="choice" onclick="choose('celular')" aria-label="Elegir un celular">
+        <span class="emoji" aria-hidden="true">📱</span>
+        <span><strong>Un celular</strong><small>¡Un regalito para vos!</small></span>
+      </button>
+      <button class="choice" onclick="choose('viaje')" aria-label="Elegir un viaje para dos con Pedraza">
+        <span class="emoji" aria-hidden="true">🚌</span>
+        <span><strong>Un viaje para dos</strong><small>Una aventura con Pedraza ✨</small></span>
+      </button>
+    </div>
+    <p class="note">Elegí una opción para revelar tu sorpresa ❤️</p>
+  </section>
+  <section id="result" aria-live="polite">
+    <div class="result-emoji" id="resultEmoji">💖</div>
+    <div class="kicker">¡Qué linda elección!</div>
+    <h1 id="resultTitle">Tu regalo</h1>
+    <div class="rule"></div>
+    <p class="result-text" id="resultText"></p>
+    <p class="sub">Para avisar cuál elegiste, tocá el botón de abajo y enviá el mensaje por WhatsApp. ❤️</p>
+    <a class="send" id="whatsapp" href="#" target="_blank" rel="noopener">Enviar mi elección por WhatsApp</a>
+    <button class="back" onclick="goBack()">Volver a ver las opciones</button>
+  </section>
+  <footer>Hecho con mucho amor ❤️ 🌹</footer>
+</main>
+<script>
+/* Número internacional sin +, espacios ni guiones. */
+const WHATSAPP_NUMBER = "5491132661257";
+const gifts = {
+ celular: {
+   emoji: "📱💗",
+   title: "¡Un celular para vos!",
+   message: "Elegiste un celular 📱❤️ ¡Espero que te encante esta sorpresa!"
+ },
+ viaje: {
+   emoji: "🚌🌹",
+   title: "¡Un viaje para dos con Pedraza!",
+   message: "Elegiste un viaje para dos con Pedraza 🚌❤️ ¡Que sea una aventura llena de lindos recuerdos!"
+ }
+};
+function choose(key) {
+ const gift = gifts[key];
+ if (!gift) return;
+ document.getElementById("home").style.display = "none";
+ document.getElementById("result").style.display = "block";
+ document.getElementById("resultEmoji").textContent = gift.emoji;
+ document.getElementById("resultTitle").textContent = gift.title;
+ document.getElementById("resultText").textContent = gift.message;
+ const msg = "¡Hola! ❤️ Ya elegí mi regalo del Día de las Madres: " +
+   (key === "celular" ? "un celular 📱" : "un viaje para dos con Pedraza 🚌") + ".";
+ document.getElementById("whatsapp").href =
+   "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
+}
+function goBack() {
+ document.getElementById("result").style.display = "none";
+ document.getElementById("home").style.display = "block";
+}
+</script>
+</body>
+</html>
